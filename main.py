@@ -38,25 +38,29 @@ class Account:
         print(math.floor(self.balance))
 
 
-acc1 = Account("Jack", 5000)
-game_on = True
+def main():
+    customer_name = input("What is your name? ")
+    deposit_amount = input("How much do you want to deposit? ")
+    acc1 = Account(customer_name, deposit_amount)
+    game_on = True
+
+    actions = {
+        "balance": acc1.bank_account,
+        "deposit": lambda: acc1.deposit(int(input("Enter deposit amount: "))),
+        "withdraw": lambda: acc1.withdraw(int(input("Enter withdraw amount: "))),
+        "account": lambda: print(str(acc1)),
+        "interest": acc1.interest,
+    }
+
+    while game_on:
+        user_input = input("What do you want to do? ")
+
+        if user_input in actions:
+            actions[user_input]()
+        elif user_input == "stop":
+            game_on = False
+        else:
+            print("Wrong input. Try again...")
 
 
-while game_on:
-    user_input = input("What do you want to do? ")
-    if user_input == "balance":
-        acc1.bank_account()
-    elif user_input == "deposit":
-        quantity = input()
-        acc1.deposit(int(quantity))
-    elif user_input == "withdraw":
-        quantity = input()
-        acc1.withdraw(quantity)
-    elif user_input == "account":
-        print(str(acc1))
-    elif user_input == "interest":
-        acc1.interest()
-    elif user_input == "stop":
-        game_on = False
-    else:
-        print("Wrong input. Try again...")
+main()
