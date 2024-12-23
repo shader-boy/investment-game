@@ -1,7 +1,6 @@
 import time
 import math
-
-from openpyxl.pivot.fields import Number
+import random
 
 
 class Account:
@@ -38,6 +37,22 @@ class Account:
         print(math.floor(self.balance))
 
 
+class StockMarket:
+
+    def __init__(self):
+        pass
+
+    stocks = {"TechCo": 100, "HealthInc": 150, "EnergyCorp": 80}
+
+    def simulate_market(prices):
+        for stock in prices:
+            # Random fluctuation between -10% and 10%
+            fluctuation = random.uniform(-0.1, 0.1)
+            prices[stock] += prices[stock] * fluctuation
+            prices[stock] = round(prices[stock], 2)
+        return prices
+
+
 def main():
     customer_name = input("What is your name? ")
     deposit_amount = input("How much do you want to deposit? ")
@@ -63,4 +78,4 @@ def main():
             print("Wrong input. Try again...")
 
 
-main()
+# main()
