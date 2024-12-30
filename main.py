@@ -18,11 +18,11 @@ class Account:
         print(f"Deposit accepted {math.floor(self.balance)}")
 
     def withdraw(self, amount):
-        if self.balance >= int(amount):
+        if int(amount) > self.balance:
+            print("Insufficient balance. ")
+        else:
             self.balance -= int(amount)
             print(f"Withdrawal successful: {math.floor(self.balance)}")
-        else:
-            print("Funds Unavailable")
 
     def interest(self):
         end_time = time.time()
@@ -33,7 +33,7 @@ class Account:
             self.start_time = time.time()
 
     def bank_account(self):
-        self.interest()
+        # self.interest()
         print(math.floor(self.balance))
 
 
@@ -44,6 +44,7 @@ class StockMarket:
 
     stocks = {"TechCo": 100, "HealthInc": 150, "EnergyCorp": 80}
 
+    # stock price cannot go to below than zero
     def simulate_market(prices):
         for stock in prices:
             # Random fluctuation between -10% and 10%
@@ -51,6 +52,34 @@ class StockMarket:
             prices[stock] += prices[stock] * fluctuation
             prices[stock] = round(prices[stock], 2)
         return prices
+
+
+class Portfolio:
+
+    def __init__(self, account):
+        self.account = account
+        self.investments = {}
+
+    def invest_stock(self):
+        #  add stock to invested_stocks with the current price
+        stock_name = input('Which stock do you want to invest? ')
+        amount = input('How much do you want to invest? ')
+
+        if stock_name not in StockMarket.stocks:
+            print('Stock is not available. ')
+        elif int(amount) <= 0:
+            print('Investment amount must be greater than 0. ')
+        elif int(amount) <= self.account.balance:
+            if self.investments[stock_name] in 
+        else:
+            self.purchased_stocks[user_input] = 
+        
+
+    # Display portfolio
+
+    # Display different Asset Class
+
+    # Different investment vehicles, Stocks, Bonds, Real Estate
 
 
 def main():
