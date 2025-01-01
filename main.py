@@ -68,14 +68,21 @@ class Portfolio:
         if stock_name not in StockMarket.stocks:
             print('Stock is not available. ')
         elif int(amount) <= 0:
-            print('Investment amount must be greater than 0. ')
+            print('Investment amount must be greater than 0.')
         elif int(amount) <= self.account.balance:
-            if self.investments[stock_name] in 
-        else:
-            self.purchased_stocks[user_input] = 
-        
+            if self.investments[stock_name] in self.investments:
+                self.investments[stock_name] += int(amount)
+            else:
+                self.investments[stock_name] = amount 
+            
+            print(f"Invested ${amount} in {stock_name}. New balance: ${self.account.bank_account}")
 
     # Display portfolio
+    def __str__(self):
+        investments_str = ", ".join([f"{stock}: ${amount}" for stock, amount in self.investments.items()])
+        return f"Portfolio of {self.account.owner}: {investments_str if investments_str else "No investments."}"
+        
+
 
     # Display different Asset Class
 
@@ -86,6 +93,7 @@ def main():
     customer_name = input("What is your name? ")
     deposit_amount = input("How much do you want to deposit? ")
     acc1 = Account(customer_name, deposit_amount)
+    acc1_portfolio = Portfolio(acc1)
     game_on = True
 
     actions = {
@@ -94,6 +102,7 @@ def main():
         "withdraw": lambda: acc1.withdraw(int(input("Enter withdraw amount: "))),
         "account": lambda: print(str(acc1)),
         "interest": acc1.interest,
+        "invest": lambda: acc1_portfolio.invest_stock()
     }
 
     while game_on:
@@ -107,4 +116,4 @@ def main():
             print("Wrong input. Try again...")
 
 
-# main()
+main()
