@@ -62,27 +62,29 @@ class Portfolio:
 
     def invest_stock(self):
         #  add stock to invested_stocks with the current price
-        stock_name = input('Which stock do you want to invest? ')
-        amount = input('How much do you want to invest? ')
+        stock_name = input("Which stock do you want to invest? ")
+        amount = input("How much do you want to invest? ")
 
         if stock_name not in StockMarket.stocks:
-            print('Stock is not available. ')
+            print("Stock is not available. ")
         elif int(amount) <= 0:
-            print('Investment amount must be greater than 0.')
+            print("Investment amount must be greater than 0.")
         elif int(amount) <= self.account.balance:
             if self.investments[stock_name] in self.investments:
                 self.investments[stock_name] += int(amount)
             else:
-                self.investments[stock_name] = amount 
-            
-            print(f"Invested ${amount} in {stock_name}. New balance: ${self.account.bank_account}")
+                self.investments[stock_name] = amount
+
+            print(
+                f"Invested ${amount} in {stock_name}. New balance: ${self.account.bank_account}"
+            )
 
     # Display portfolio
     def __str__(self):
-        investments_str = ", ".join([f"{stock}: ${amount}" for stock, amount in self.investments.items()])
+        investments_str = ", ".join(
+            [f"{stock}: ${amount}" for stock, amount in self.investments.items()]
+        )
         return f"Portfolio of {self.account.owner}: {investments_str if investments_str else "No investments."}"
-        
-
 
     # Display different Asset Class
 
@@ -102,7 +104,7 @@ def main():
         "withdraw": lambda: acc1.withdraw(int(input("Enter withdraw amount: "))),
         "account": lambda: print(str(acc1)),
         "interest": acc1.interest,
-        "invest": lambda: acc1_portfolio.invest_stock()
+        "invest": acc1_portfolio.invest_stock,
     }
 
     while game_on:
