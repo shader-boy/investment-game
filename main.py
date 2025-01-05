@@ -42,7 +42,7 @@ class StockMarket:
     def __init__(self):
         pass
 
-    stocks = {"TechCo": 100, "HealthInc": 150, "EnergyCorp": 80}
+    stocks = {"AAPL": 100, "GOOGL": 150, "AMZN": 80}
 
     # stock price cannot go to below than zero
     def simulate_market(prices):
@@ -70,13 +70,21 @@ class Portfolio:
         elif int(amount) <= 0:
             print("Investment amount must be greater than 0.")
         elif int(amount) <= self.account.balance:
-            if self.investments[stock_name] in self.investments:
-                self.investments[stock_name] += int(amount)
+            if stock_name in self.investments:
+                StockMarket.simulate_market(StockMarket.stocks)
+
+                # share quantity = amount / current price
+                quantity = int(amount) / int(StockMarket.stocks[stock_name])
+                self.investments[stock_name] += int(quantity)
+                self.account.balance -= int(amount)
             else:
-                self.investments[stock_name] = amount
+                StockMarket.simulate_market(StockMarket.stocks)
+                quantity = int(amount) / int(StockMarket.stocks[stock_name])
+                self.investments[stock_name] = quantity
+                self.account.balance -= int(amount)
 
             print(
-                f"Invested ${amount} in {stock_name}. New balance: ${self.account.bank_account}"
+                f"Bought {quantity} shares of {stock_name} with the price of {StockMarket.stocks[stock_name]}. New balance: ${self.account.balance}"
             )
 
     # Display portfolio
@@ -105,6 +113,7 @@ def main():
         "account": lambda: print(str(acc1)),
         "interest": acc1.interest,
         "invest": acc1_portfolio.invest_stock,
+        "portfolio": lambda: print(str(acc1_portfolio)),
     }
 
     while game_on:
