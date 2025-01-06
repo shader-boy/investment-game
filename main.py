@@ -29,11 +29,11 @@ class Account:
         interest_rate = 0.05
         compound = (end_time - self.start_time) / 10
         if compound >= 1:
-            self.balance = self.balance * ((1 + interest_rate) ** compound)
+            self.balance = round(self.balance * ((1 + interest_rate) ** compound), 2)
             self.start_time = time.time()
 
     def bank_account(self):
-        # self.interest()
+        self.interest()
         print(math.floor(self.balance))
 
 
@@ -42,16 +42,34 @@ class StockMarket:
     def __init__(self):
         pass
 
-    stocks = {"AAPL": 100, "GOOGL": 150, "AMZN": 80}
+    stocks = {
+        "AAPL": 150.00,  # Apple
+        "GOOGL": 2800.50,  # Alphabet (Google)
+        "AMZN": 3400.25,  # Amazon
+        "MSFT": 299.75,  # Microsoft
+        "TSLA": 800.10,  # Teslaff
+        "META": 315.30,  # Meta (Facebook)
+        "NFLX": 410.45,  # Netflix
+        "NVDA": 250.90,  # NVIDIA
+        "ADBE": 650.60,  # Adobe
+        "ORCL": 88.25,  # Oracle
+    }
 
     # stock price cannot go to below than zero
-    def simulate_market(prices):
-        for stock in prices:
+    def simulate_market(self):
+        for stock in self.stocks:
             # Random fluctuation between -10% and 10%
             fluctuation = random.uniform(-0.1, 0.1)
-            prices[stock] += prices[stock] * fluctuation
-            prices[stock] = round(prices[stock], 2)
-        return prices
+            self.stocks[stock] += self.stocks[stock] * fluctuation
+            self.stocks[stock] = max(0, round(self.stocks[stock], 2))
+
+    def __str__(self):
+        self.simulate_market()
+        stocks = ", ".join(
+            [f"{stock}: ${price}" for stock, price in self.stocks.items()]
+        )
+
+        return f"Stock Prices: {stocks}"
 
 
 class Portfolio:
@@ -75,22 +93,25 @@ class Portfolio:
 
                 # share quantity = amount / current price
                 quantity = int(amount) / int(StockMarket.stocks[stock_name])
-                self.investments[stock_name] += int(quantity)
+                self.investments[stock_name] += round(int(quantity), 4)
                 self.account.balance -= int(amount)
             else:
                 StockMarket.simulate_market(StockMarket.stocks)
                 quantity = int(amount) / int(StockMarket.stocks[stock_name])
-                self.investments[stock_name] = quantity
+                self.investments[stock_name] = round(quantity, 4)
                 self.account.balance -= int(amount)
 
             print(
-                f"Bought {quantity} shares of {stock_name} with the price of {StockMarket.stocks[stock_name]}. New balance: ${self.account.balance}"
+                f"Bought {round(quantity, 4)} shares of {stock_name} with the price of {StockMarket.stocks[stock_name]}. New balance: ${self.account.balance}"
             )
 
     # Display portfolio
     def __str__(self):
         investments_str = ", ".join(
-            [f"{stock}: ${amount}" for stock, amount in self.investments.items()]
+            [
+                f"{stock}: {quantity} shares"
+                for stock, quantity in self.investments.items()
+            ]
         )
         return f"Portfolio of {self.account.owner}: {investments_str if investments_str else "No investments."}"
 
@@ -104,6 +125,7 @@ def main():
     deposit_amount = input("How much do you want to deposit? ")
     acc1 = Account(customer_name, deposit_amount)
     acc1_portfolio = Portfolio(acc1)
+    stock_market = StockMarket()
     game_on = True
 
     actions = {
@@ -114,6 +136,7 @@ def main():
         "interest": acc1.interest,
         "invest": acc1_portfolio.invest_stock,
         "portfolio": lambda: print(str(acc1_portfolio)),
+        "market": lambda: print(stock_market),
     }
 
     while game_on:
@@ -127,4 +150,5 @@ def main():
             print("Wrong input. Try again...")
 
 
-main()
+if __name__ == "__main__":
+    main()
