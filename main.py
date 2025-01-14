@@ -64,7 +64,7 @@ class StockMarket:
             self.stocks[stock] = max(0, round(self.stocks[stock], 2))
 
     def __str__(self):
-        self.simulate_market()
+        self.simulate_market(self)
         stocks = ", ".join(
             [f"{stock}: ${price}" for stock, price in self.stocks.items()]
         )
@@ -89,14 +89,14 @@ class Portfolio:
             print("Investment amount must be greater than 0.")
         elif int(amount) <= self.account.balance:
             if stock_name in self.investments:
-                StockMarket.simulate_market(StockMarket.stocks)
+                StockMarket.simulate_market(self)
 
                 # share quantity = amount / current price
                 quantity = int(amount) / int(StockMarket.stocks[stock_name])
                 self.investments[stock_name] += round(int(quantity), 4)
                 self.account.balance -= int(amount)
             else:
-                StockMarket.simulate_market(StockMarket.stocks)
+                StockMarket.simulate_market(self)
                 quantity = int(amount) / int(StockMarket.stocks[stock_name])
                 self.investments[stock_name] = round(quantity, 4)
                 self.account.balance -= int(amount)
